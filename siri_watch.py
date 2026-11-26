@@ -16,7 +16,7 @@ def check(page, loc):
     page.get_by_text("Ansøg om tilbagerejsetilladelse").first.click()
     with page.expect_response(lambda r: "available_days" in r.url, timeout=30000) as resp:
         page.get_by_text("Fortsæt", exact=True).first.click()
-    data = resp.value.json()
+    data = resp.value.json(); print(loc, "status", resp.value.status, data)
     return sorted(d["day"] for d in data.get("available_days", []))
 
 def notify(msg):
@@ -30,7 +30,7 @@ new, lines = {}, []
 
 with sync_playwright() as p:
     browser = p.chromium.launch()
-    page = browser.new_page()
+    page = browser.new_page(locale="da-DK", timezone_id="Europe/Copenhagen", user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36")
     for loc in LOCATIONS:
         try:
             days = check(page, loc)
