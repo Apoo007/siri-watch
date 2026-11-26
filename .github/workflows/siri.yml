@@ -1,4 +1,4 @@
-name: SIRI watch
+name: SIRI watch  # tilbagerejsetilladelse
 on:
   schedule:
     - cron: "*/15 * * * *"
